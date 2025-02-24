@@ -1,0 +1,37 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    background: #3f51b5;
+    color: white;
+    padding-top: 30px;
+}
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+}
+.sidebar a:hover {
+    background: #303f9f;
+}
+.header {
+    height: 60px;
+    background: #3f51b5;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-left: 250px;
+}
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}
+.breadcrumb {
+    cursor: pointer;
+    /*background: #ffffff;*/
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}

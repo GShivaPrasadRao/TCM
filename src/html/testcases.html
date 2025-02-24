@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cases</title>
+    <link href="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.3/umd/material-ui.production.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <link href="../styles/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="breadcrumb" onclick="toggleSidebar()">☰ Menu</div>
+        <a href="dashboard.html" onclick="showSection('dashboard')">Dashboard</a>
+        <a href="projects.html" onclick="showSection('projects')">Projects</a>
+        <a href="testcases.html" onclick="showSection('testcases')">Test Cases</a>
+        <a href="testpage.html" onclick="showSection('testcases')">Test Page</a>
+        <a href="testdata.html" onclick="showSection('testdata')">Test Data</a>
+        <a href="connectordata.html" onclick="showSection('connectordata')">Connector Data</a>
+
+        <a href="reports.html" onclick="showSection('reports')">Reports</a>
+       
+    </div>
+    <div class="header">
+        <h4>Test Management</h4>
+        <div>
+            <span>Profile</span> | <span>Settings</span> | <span>Logout</span>
+        </div>
+    </div>
+    <div class="main-content">
+        <div id="testcases" class="content-section">
+            <h3>Test Cases</h3>
+            <!-- Add your test cases content here -->
+            <form id="testCaseForm" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Project Name</label>
+                    <select class="form-control">
+                        <option>KnowledgeFabricConfiguration</option>
+                        <option>KnowledgeFabricMultiplexer</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Module Type</label>
+                    <select class="form-control">
+                        <option>User</option>
+                        <option>Admin</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Screen Name</label>
+                    <input type="text" class="form-control" placeholder="Project">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Test Scenario</label>
+                    <input type="text" class="form-control" placeholder="Project Creation">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Test Case</label>
+                    <input type="text" class="form-control" placeholder="Verification of Project Creation">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Test Case Type</label>
+                    <select class="form-control">
+                        <option>Positive</option>
+                        <option>Negative</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Test Case Expected Result</label>
+                    <input type="text" class="form-control" placeholder="Able to create the project">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Prepared By</label>
+                    <input type="text" class="form-control" placeholder="Username">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Comments</label>
+                    <input type="text" class="form-control" placeholder="Text">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+            <table class="table mt-4" id="testCaseTable">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Module Type</th>
+                        <th>Screen Name</th>
+                        <th>Test Scenario</th>
+                        <th>Test Case</th>
+                        <th>Test Case Type</th>
+                        <th>Expected Result</th>
+                        <th>Prepared By</th>
+                        <th>Comments</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        
+                        <td>Knowledge Fabric</td>
+                        <td>User</td>
+                        <td>Project</td>
+                        <td>ProjectCreation</td>
+                        <td>Verify the Project Creation</td>
+                        <td>Positive</td>
+                        <td>Able to create the project</td>
+                        <td>ShivaPrasad</td>
+                        <td>Login scenario</td>
+                       
+               
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editTestCase('Sample Project', 'Sample Description')">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="showDeleteModal()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        
+                        <td>Knowledge Fabric</td>
+                        <td>User</td>
+                        <td>Project</td>
+                        <td>ConnectorCreation</td>
+                        <td>Verify the Connector Creation</td>
+                        <td>Positive</td>
+                        <td>Able to create the Connector</td>
+                        <td>ShivaPrasad</td>
+                        <td>Login scenario</td>
+                       
+               
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editTestCase('Sample Project', 'Sample Description')">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="showDeleteModal()">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="../scripts/app.js"></script>
+    <script src="../scripts/testcases.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

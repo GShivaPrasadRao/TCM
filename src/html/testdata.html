@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Data</title>
+    <link href="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.3/umd/material-ui.production.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <link href="../styles/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="breadcrumb" onclick="toggleSidebar()">☰ Menu</div>
+        <a href="dashboard.html" onclick="showSection('dashboard')">Dashboard</a>
+        <a href="projects.html" onclick="showSection('projects')">Projects</a>
+        <a href="testcases.html" onclick="showSection('testcases')">Test Cases</a>
+        <a href="testpage.html" onclick="showSection('testcases')">Test Page</a>
+        <a href="testdata.html" onclick="showSection('testdata')">Test Data</a>
+        <a href="connectordata.html" onclick="showSection('connectordata')">Connector Data</a>
+
+        <a href="reports.html" onclick="showSection('reports')">Reports</a>
+       
+    </div>
+    <div class="header">
+        <h4>Test Management</h4>
+        <div>
+            <span>Profile</span> | <span>Settings</span> | <span>Logout</span>
+        </div>
+    </div>
+    
+    <!-- <div id="common-sections"></div> -->
+    <div class="main-content">
+        <div id="testdata" class="content-section">
+            <h3>Test Data</h3>
+            <form class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Project Name</label>
+                    <input type="text" id="projectName" class="form-control" value="KnowledgeFabricConfiguration">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Screen Name</label>
+                    <input type="text" id="screenName" class="form-control" value="ProjectList">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Category</label>
+                    <input type="text" id="category" class="form-control" value="AgileManagement">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Connector</label>
+                    <input type="text" id="connector" class="form-control" value="ADO">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary mt-4">Save</button>
+                </div>
+            </form>
+            <table class="table mt-4" id="testDataTable">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Screen Name</th>
+                        <th>Category</th>
+                        <th>Connector</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>KnowledgeFabricConfiguration</td>
+                        <td>ProjectList</td>
+                        <td>AgileManagement</td>
+                        <td>ADO</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editTestData('KnowledgeFabricConfiguration', 'ProjectList', 'AgileManagement', 'ADO')">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="showDeleteModal()">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="modal" id="editModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Test Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Project Name</label>
+                        <input type="text" id="editProjectName" class="form-control">
+                        <label class="form-label">Screen Name</label>
+                        <input type="text" id="editScreenName" class="form-control">
+                        <label class="form-label">Category</label>
+                        <input type="text" id="editCategory" class="form-control">
+                        <label class="form-label">Connector</label>
+                        <input type="text" id="editConnector" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal" id="deleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this test data?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../scripts/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function(){
+            $("#common-sections").load("common.html");
+        });
+    </script>
+</body>
+</html>
