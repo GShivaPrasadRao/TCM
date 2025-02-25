@@ -1,0 +1,24 @@
+[
+    {
+      "testCase": "Create ADO Connector",
+      "category": "AgileManagementTools",
+      "connectorType": "ADO",
+      "toolAPIURL": "https://dev.azure.com/Phoneix/",
+      "toolProject": "Canvas Solutions",
+      "ckProject": "RTPN",
+      "password": "5iy988pWJ9BxNXJQQJ99ALACAAAAAg4e2EAAASAZDOUL1S",
+      "username": "shivaprasad.rao@gmail.com",
+      "documents": ["doc1", "doc2"],
+      "startDate": "February 17, 2025",
+      "teamName": "Phoneix",
+      "areaPath": "Phoneix\\Portfolio Team\\Program Team-Phoneix Bundles\\Phoneix Knowledge"
+    },
+    {
+      "testCase": "Update ADO Connector",
+      "toolProject": "Phoenix Solutions Updated",
+      "ckProject": "Updated RTPN",
+      "password": "UpdatedPassword123",
+      "username": "updateduser@gmail.com"
+    }
+  ]
+  

@@ -1,0 +1,14 @@
+{
+    "connectorType": "ADO",
+    "category": "AgileManagementTools",
+    "toolAPIURL": "https://dev.azure.com/PhoenixSolutions/",
+    "toolProject": "Phoenix Solutions",
+    "ckProject": "RTPN",
+    "usernameEmailID": "shivaprasad@test.com",
+    "passwordAccessToken": "5iyQXQdgQ0h35x0L9HJy31vwaVfx9ogC8pQptaR3LUBNpWJ",
+    "documents": ["DocToText", "KGOntology"],
+    "startDate": "February 17, 2025",
+    "teamName": "Phoenix Knowledge",
+    "areaPath": "Phoenix Solutions\\Portfolio Team\\Program Team- Phoenix Bundles\\Phoenix Knowledge"
+  }
+  
