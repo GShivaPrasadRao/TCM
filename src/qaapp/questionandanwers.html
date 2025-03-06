@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Q&A Platform</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        .sidenav {
+            width: 250px;
+            padding: 10px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .question-container {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .answer-container {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <ul id="slide-out" class="sidenav sidenav-fixed">
+        <li><a class="subheader">Categories</a></li>
+        <li>
+            <div class="input-field">
+                <select id="category1Dropdown" onchange="updateCategory2()">
+                    <option value="" disabled selected>Choose Category 1</option>
+                    <option value="backend">BackEnd</option>
+                    <option value="frontend">FrontEnd</option>
+                    <option value="database">Database</option>
+                    <option value="cloud">Cloud</option>
+                    <option value="tools">Tools</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="input-field">
+                <select id="category2Dropdown" onchange="updateCategory3(); displayQASection();">
+                    <option value="" disabled selected>Choose Category 2</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="input-field">
+                <select id="category3Dropdown">
+                    <option value="" disabled selected>Choose Category 3</option>
+                </select>
+            </div>
+        </li>
+    </ul>
+
+    <!-- Header -->
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="#" class="brand-logo center">Interview Q&A</a>
+            <ul class="right">
+                <li><a href="#"><i class="material-icons">account_circle</i></a></li>
+                <li><a href="#"><i class="material-icons">settings</i></a></li>
+                <li><a href="#"><i class="material-icons">exit_to_app</i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div id="qa-section" style="display: none;">
+            <div class="question-container" onclick="toggleAnswer('q1')">
+                <h5>What are the new features in Java 8?</h5>
+                <i class="material-icons">expand_more</i>
+            </div>
+            <div class="answer-container" id="q1">
+                <h4>Answer</h4>
+                <p>Java 8 introduced features like Lambda Expressions, Streams, Default Methods, and Functional Interfaces.
+                </p>
+
+                <h4>Use Case</h4>
+                <p>Lambda Expressions simplify anonymous inner class usage.</p>
+
+                <h4>Sample Code</h4>
+                <pre><code>interface Greeting {
+    void sayHello();
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        Greeting greeting = () -> System.out.println("Hello, Java 8!");
+        greeting.sayHello();
+    }
+}</code></pre>
+            </div>
+
+            <div class="question-container" onclick="toggleAnswer('q2')">
+                <h5>What is a Lambda Expression in Java?</h5>
+                <i class="material-icons">expand_more</i>
+            </div>
+            <div class="answer-container" id="q2">
+                <p>Lambda Expression is an anonymous function that provides a clear and concise way to represent one-method
+                    interfaces using an expression.</p>
+            </div>
+
+            <div class="question-container" onclick="toggleAnswer('q3')">
+                <h5>What is the difference between List and Set in Java?</h5>
+                <i class="material-icons">expand_more</i>
+            </div>
+            <div class="answer-container" id="q3">
+                <p>List allows duplicate values and maintains insertion order, while Set does not allow duplicates and does
+                    not guarantee any specific order.</p>
+            </div>
+
+            <div class="question-container" onclick="toggleAnswer('q4')">
+                <h5>What is the purpose of the Stream API in Java 8?</h5>
+                <i class="material-icons">expand_more</i>
+            </div>
+            <div class="answer-container" id="q4">
+                <p>The Stream API is used to process collections of data in a functional style, providing operations such as
+                    filtering, mapping, and reducing.</p>
+            </div>
+
+            <div class="question-container" onclick="toggleAnswer('q5')">
+                <h5>What is the Optional class in Java 8?</h5>
+                <i class="material-icons">expand_more</i>
+            </div>
+            <div class="answer-container" id="q5">
+                <p>The Optional class is a container object used to represent a value that may or may not be present,
+                    helping to avoid NullPointerExceptions.</p>
+            </div>
+        </div>
+    </div>
+
+    <p>End of the Q&A section.</p>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <a href="#" class="waves-effect"><i class="material-icons">chevron_left</i></a>
+        <a href="#" class="waves-effect">1</a>
+        <a href="#" class="waves-effect">2</a>
+        <a href="#" class="waves-effect">3</a>
+        <a href="#" class="waves-effect"><i class="material-icons">chevron_right</i></a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems);
+        });
+
+        function toggleAnswer(id) {
+            var answerSection = document.getElementById(id);
+            if (answerSection.style.display === "none" || answerSection.style.display === "") {
+                answerSection.style.display = "block";
+            } else {
+                answerSection.style.display = "none";
+            }
+        }
+
+        const category2Options = {
+            backend: ['Java', 'NodeJS', 'Python'],
+            frontend: ['ReactJS', 'Angular', 'VueJS'],
+            database: ['MySQL', 'PostgreSQL', 'MongoDB'],
+            cloud: ['AWS', 'Azure', 'Google Cloud'],
+            tools: ['Git', 'Docker', 'Kubernetes']
+        };
+
+        const category3Options = {
+            Java: ['SpringBoot', 'Spring MVC', 'Hibernate'],
+            NodeJS: ['Express', 'NestJS', 'Koa'],
+            Python: ['Django', 'Flask', 'FastAPI'],
+            ReactJS: ['Hooks', 'Redux', 'Context API'],
+            Angular: ['NgRx', 'RxJS', 'Angular Material'],
+            VueJS: ['Vuex', 'Vuetify', 'NuxtJS'],
+            MySQL: ['InnoDB', 'MyISAM', 'NDB'],
+            PostgreSQL: ['PostGIS', 'PL/pgSQL', 'pgAdmin'],
+            MongoDB: ['Mongoose', 'Aggregation', 'Sharding'],
+            AWS: ['EC2', 'S3', 'Lambda'],
+            Azure: ['VM', 'Blob Storage', 'Functions'],
+            'Google Cloud': ['Compute Engine', 'Cloud Storage', 'Cloud Functions'],
+            Git: ['GitHub', 'GitLab', 'BitBucket'],
+            Docker: ['Docker Compose', 'Docker Swarm', 'Kubernetes'],
+            Kubernetes: ['Helm', 'Kubectl', 'Minikube']
+        };
+
+        function updateCategory2() {
+            const category1 = document.getElementById('category1Dropdown').value;
+            const category2Dropdown = document.getElementById('category2Dropdown');
+            category2Dropdown.innerHTML = '<option value="" disabled selected>Choose Category 2</option>';
+            if (category1 && category2Options[category1]) {
+                category2Options[category1].forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option;
+                    opt.innerHTML = option;
+                    category2Dropdown.appendChild(opt);
+                });
+            }
+            M.FormSelect.init(category2Dropdown);
+        }
+
+        function updateCategory3() {
+            const category2 = document.getElementById('category2Dropdown').value;
+            const category3Dropdown = document.getElementById('category3Dropdown');
+            category3Dropdown.innerHTML = '<option value="" disabled selected>Choose Category 3</option>';
+            if (category2 && category3Options[category2]) {
+                category3Options[category2].forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option;
+                    opt.innerHTML = option;
+                    category3Dropdown.appendChild(opt);
+                });
+            }
+            M.FormSelect.init(category3Dropdown);
+        }
+
+        function displayQASection() {
+            const category2 = document.getElementById('category2Dropdown').value;
+            const qaSection = document.getElementById('qa-section');
+            if (category2 === 'Java') {
+                qaSection.style.display = 'block';
+            } else {
+                qaSection.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+
+</html>
