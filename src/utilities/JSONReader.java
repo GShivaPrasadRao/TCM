@@ -18,4 +18,7 @@ public class JsonDataReader {
     public static String getValue(String key) {
         return jsonData.get(key).asText();
     }
+     public static String getValue(String connectorType, String key) {
+        return jsonData.get("connectors").get(connectorType).get(key).asText();
+    }
 }
