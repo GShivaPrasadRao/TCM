@@ -1,0 +1,36 @@
+import io.cucumber.java.en.*;
+import org.junit.Assert;
+import org.openqa.selenium.WebDriver;
+
+public class SyncStatusSteps {
+    WebDriver driver;
+    SyncStatusPage syncStatusPage;
+
+    // Constructor to initialize WebDriver and Page Object
+    public SyncStatusSteps() {
+        this.driver = Hooks.getDriver();
+        this.syncStatusPage = new SyncStatusPage(driver);
+    }
+
+    @Then("Sync status for {string} should be {string} and send Teams notification")
+    public void sync_status_for_connector_should_be_and_send_teams_notification(String connectorName, String expectedStatus) {
+        boolean isStatusVisible = syncStatusPage.isSyncStatusDisplayed(connectorName, expectedStatus);
+
+        // Validate Sync Status
+        Assert.assertTrue("Expected sync status '" + expectedStatus + "' for connector '" + connectorName + "' is not displayed!", isStatusVisible);
+
+        // Sample Data (Replace with dynamic values)
+        String category = "Agile Management";
+        String connectorID = "ADO123";
+        String projectName = "ADOConnectorProj1";
+        String projectID = "ADOCP1";
+        String syncName = "Nifi Sync";
+
+        // Send Teams Notification if Sync is Completed
+        if (expectedStatus.equalsIgnoreCase("Completed")) {
+            TeamsNotifier.sendNotification(category, connectorName, connectorID, projectName, projectID, syncName);
+        }
+
+        System.out.println("Verified sync status '" + expectedStatus + "' for connector: " + connectorName);
+    }
+}
