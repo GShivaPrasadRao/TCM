@@ -1,0 +1,10 @@
+<suite name="Cucumber Test Suite" verbose="1" parallel="false">
+    <listeners>
+        <listener class-name="your.package.CucumberTestListener"/>
+    </listeners>
+    <test name="Cucumber Test">
+        <classes>
+            <class name="your.package.TestRunner"/>
+        </classes>
+    </test>
+</suite>
