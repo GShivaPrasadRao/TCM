@@ -1,0 +1,69 @@
+import io.cucumber.plugin.ConcurrentEventListener;
+import io.cucumber.plugin.event.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class CucumberTestListener implements ConcurrentEventListener {
+    private static int totalTests = 0;
+    private static int passedTests = 0;
+    private static int failedTests = 0;
+    private static final Map<String, Integer> tagWiseCount = new HashMap<>();
+    private static final Map<String, Integer> tagWisePass = new HashMap<>();
+    private static final Map<String, Integer> tagWiseFail = new HashMap<>();
+
+    @Override
+    public void setEventPublisher(EventPublisher publisher) {
+        publisher.registerHandlerFor(TestCaseStarted.class, this::onTestCaseStart);
+        publisher.registerHandlerFor(TestCaseFinished.class, this::onTestCaseFinish);
+    }
+
+    private void onTestCaseStart(TestCaseStarted event) {
+        totalTests++;
+        List<String> tags = event.getTestCase().getTags();
+        updateTagCount(tags, tagWiseCount);
+    }
+
+    private void onTestCaseFinish(TestCaseFinished event) {
+        boolean isPassed = event.getResult().getStatus() == Status.PASSED;
+        if (isPassed) {
+            passedTests++;
+            updateTagCount(event.getTestCase().getTags(), tagWisePass);
+        } else {
+            failedTests++;
+            updateTagCount(event.getTestCase().getTags(), tagWiseFail);
+        }
+    }
+
+    private void updateTagCount(List<String> tags, Map<String, Integer> map) {
+        for (String tag : tags) {
+            tag = tag.replace("@", ""); // Remove '@' for clean output
+            map.put(tag, map.getOrDefault(tag, 0) + 1);
+        }
+    }
+
+    public static void generateReport() {
+        System.out.println("🏆 Cucumber Test Execution Summary:");
+        System.out.println("Total Tests: " + totalTests);
+        System.out.println("✅ Passed: " + passedTests);
+        System.out.println("❌ Failed: " + failedTests);
+
+        System.out.println("\n📌 Tag-wise Test Execution:");
+        for (String tag : tagWiseCount.keySet()) {
+            int total = tagWiseCount.getOrDefault(tag, 0);
+            int passed = tagWisePass.getOrDefault(tag, 0);
+            int failed = tagWiseFail.getOrDefault(tag, 0);
+            double passPercentage = (total == 0) ? 0 : (passed * 100.0) / total;
+            System.out.println(tag + " → Total: " + total + ", ✅ Passed: " + passed + ", ❌ Failed: " + failed + ", 🎯 Pass %: " + String.format("%.2f", passPercentage) + "%");
+        }
+    }
+
+    public static int getTotalTests() { return totalTests; }
+    public static int getPassedTests() { return passedTests; }
+    public static int getFailedTests() { return failedTests; }
+    public static Map<String, Integer> getTagWiseCount() { return tagWiseCount; }
+    public static Map<String, Integer> getTagWisePass() { return tagWisePass; }
+    public static Map<String, Integer> getTagWiseFail() { return tagWiseFail; }
+}
