@@ -1,0 +1,68 @@
+import org.testng.IReporter;
+import org.testng.ISuite;
+import org.testng.xml.XmlSuite;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+public class CustomHTMLReport implements IReporter {
+    
+    private int totalTests = 0;
+    private int passedTests = 0;
+    private int failedTests = 0;
+    
+    @Override
+    public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
+        StringBuilder report = new StringBuilder();
+        
+        // HTML Report Structure
+        report.append("<html><head><title>Automation Test Report</title>");
+        report.append("<style> table { width: 100%; border-collapse: collapse; }");
+        report.append("th, td { border: 1px solid black; padding: 8px; text-align: left; }</style>");
+        report.append("</head><body>");
+        
+        report.append("<h1>Automation Test Report</h1>");
+        
+        // Overall Summary Table
+        report.append("<h2>Overall Summary</h2>");
+        report.append("<table><tr><th>Total Test Cases</th><th>Total Passed</th><th>Total Failed</th></tr>");
+        
+        for (ISuite suite : suites) {
+            suite.getResults().forEach((key, result) -> {
+                totalTests += result.getTestContext().getAllTestMethods().length;
+                passedTests += result.getTestContext().getPassedTests().size();
+                failedTests += result.getTestContext().getFailedTests().size();
+            });
+        }
+
+        report.append(String.format("<tr><td>%d</td><td>%d</td><td>%d</td></tr></table>", totalTests, passedTests, failedTests));
+
+        // Connector-wise Test Results
+        report.append("<h2>Connector Level Test Results</h2>");
+        report.append("<table><tr><th>Connector Name</th><th>Total Test Cases</th><th>Passed</th><th>Failed</th></tr>");
+
+        for (ISuite suite : suites) {
+            for (Map.Entry<String, ISuite.ISuiteResult> entry : suite.getResults().entrySet()) {
+                String connectorName = suite.getName();
+                int total = entry.getValue().getTestContext().getAllTestMethods().length;
+                int passed = entry.getValue().getTestContext().getPassedTests().size();
+                int failed = entry.getValue().getTestContext().getFailedTests().size();
+
+                report.append(String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td></tr>", connectorName, total, passed, failed));
+            }
+        }
+
+        report.append("</table>");
+        
+        // Closing HTML Tags
+        report.append("</body></html>");
+        
+        // Save the Report
+        try (FileWriter writer = new FileWriter(outputDirectory + "/TestReport.html")) {
+            writer.write(report.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
