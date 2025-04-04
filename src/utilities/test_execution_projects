@@ -1,0 +1,8 @@
+{
+  "_id": { "$oid": "some_object_id" },
+  "executionId": "RUN_20250404_0804",
+  "projectId": "PROJECT_04042025_0804",
+  "isActive": true,
+  "createdAt": { "$date": "2023-10-27T10:00:00Z" },
+  "updatedAt": { "$date": "2023-10-27T10:00:00Z" }
+}
