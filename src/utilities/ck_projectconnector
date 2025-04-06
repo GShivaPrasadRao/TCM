@@ -1,0 +1,91 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('H 35 21 * * *') // Runs daily at 03:05 AM IST (21:35 UTC). Adjust as needed.
+                               // Current time in Secunderabad is ~2:05 PM IST on April 6th, 2025.
+                               // To run at, say, 8:00 AM IST, the cron would be 'H 30 2 * * *'
+                               // (IST is UTC+5:30, so 8:00 AM IST is 2:30 AM UTC).
+    }
+
+    stages {
+        stage('Fetch from GitLab Repo') {
+            steps {
+                checkout(
+                    scmGit(
+                        branches: [[name: 'main']], // Replace 'main' with your branch name if different
+                        doGenerateSubmodules: false,
+                        extensions: [],
+                        userRemoteConfigs: [[
+                            credentialsId: 'your-gitlab-credentials-id', // Replace with your GitLab credentials ID
+                            url: 'your-gitlab-repository-url'         // Replace with your GitLab repository URL
+                        ]]
+                    )
+                )
+            }
+        }
+
+        stage('Run Automation Test Suite') {
+            steps {
+                script {
+                    def testCommand = 'mvn clean test -DsuiteXmlFile=path/to/your/test-suite.xml'
+                    // Replace 'mvn clean test -DsuiteXmlFile=path/to/your/test-suite.xml'
+                    // with the actual command to run your automation test suite.
+                    // Examples:
+                    // - For Gradle: './gradlew test' or './gradlew runTestSuite'
+                    // - For Python (e.g., pytest): 'pytest path/to/your/tests'
+                    // - For Node.js (e.g., Mocha, Jest): 'npm test' or 'yarn test'
+
+                    println "Running command: ${testCommand}"
+                    sh "${testCommand}"
+                }
+            }
+        }
+
+        stage('Publish Report') {
+            steps {
+                script {
+                    def reportDir = 'path/to/your/report/directory'
+                    // Replace 'path/to/your/report/directory' with the actual path
+                    // where your test reports are generated.
+                    // Examples:
+                    // - For Maven/Surefire: 'target/surefire-reports'
+                    // - For Gradle: 'build/reports/tests'
+                    // - For pytest: You might need a plugin to generate XML reports
+
+                    def reportFilesPattern = '**/*.xml, **/*.html' // Adjust pattern as needed
+
+                    def foundReports = findFiles(glob: "${reportDir}/${reportFilesPattern}")
+
+                    if (foundReports) {
+                        println "Found report files: ${foundReports.collect { it.path }}"
+
+                        // Example for publishing JUnit/Surefire-style XML reports
+                        junit '${reportDir}/**/*.xml'
+
+                        // Example for publishing HTML reports (you might need a plugin like HTML Publisher)
+                        // htmlPublisher(publishers: [
+                        //     [name: 'Automation Test Report', path: '${reportDir}/index.html']
+                        // ])
+
+                        println "Test reports published."
+                    } else {
+                        println "No test reports found in ${reportDir} matching the pattern: ${reportFilesPattern}"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs() // Clean the workspace after each run
+        }
+        success {
+            println 'Automation test suite ran successfully and report published.'
+        }
+        failure {
+            println 'Automation test suite failed.'
+        }
+    }
+}
