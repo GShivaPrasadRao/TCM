@@ -1,0 +1,46 @@
+def NifiStatusPath = 'NifiStatusCheck'
+
+pipeline {
+    agent any
+    triggers {
+        cron('H 10 * * *') // Trigger at 10am
+    }
+    stages {
+        stage('Cleanup Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+        stage('Copy Artifacts from ProjectConnectSync') {
+            steps {
+                dir("${NifiStatusPath}") {
+                    copyArtifacts filter: '**/*', projectName: 'ProjectConnectSync', selector: lastSuccessful()
+                }
+            }
+        }
+        stage('Run NifiStatusCheck') {
+            steps {
+                dir("${NifiStatusPath}") {
+                    sh 'mvn test -Dcucumber-tags=@NifiStatusCheck'
+                }
+            }
+        }
+        stage('Publish Report') {
+            steps {
+                dir("${NifiStatusPath}") {
+                    cucumber buildStatus: 'UNSTABLE', fileIncludePattern: '**/cucumber.json', sortingMethod: 'ALPHABETICAL'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                currentBuild.result = currentBuild.result ?: 'SUCCESS'
+                emailext subject: "Jenkins Job: ${currentBuild.fullDisplayName}",
+                         body: "Status: ${currentBuild.result}",
+                         to: 'your-email@example.com'
+            }
+        }
+    }
+}

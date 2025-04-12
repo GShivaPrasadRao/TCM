@@ -1,0 +1,46 @@
+def CleanUpPath = 'CleanUpConnectorsandProject'
+
+pipeline {
+    agent any
+    triggers {
+        cron('H 11 * * *') // Trigger at 11am
+    }
+    stages {
+        stage('Cleanup Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+        stage('Copy Artifacts from ProjectConnectSync') {
+            steps {
+                dir("${CleanUpPath}") {
+                    copyArtifacts filter: '**/*', projectName: 'ProjectConnectSync', selector: lastSuccessful()
+                }
+            }
+        }
+        stage('Run CleanUpConnectorsandProject') {
+            steps {
+                dir("${CleanUpPath}") {
+                    sh 'mvn test -Dcucumber-tags=@CleanUpConnectorsandProject'
+                }
+            }
+        }
+        stage('Publish Report') {
+            steps {
+                dir("${CleanUpPath}") {
+                    cucumber buildStatus: 'UNSTABLE', fileIncludePattern: '**/cucumber.json', sortingMethod: 'ALPHABETICAL'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                currentBuild.result = currentBuild.result ?: 'SUCCESS'
+                emailext subject: "Jenkins Job: ${currentBuild.fullDisplayName}",
+                         body: "Status: ${currentBuild.result}",
+                         to: 'your-email@example.com'
+            }
+        }
+    }
+}

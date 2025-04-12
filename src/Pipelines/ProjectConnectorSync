@@ -1,0 +1,54 @@
+def ProjectConnectSyncPath = 'ProjectConnectSync'
+
+pipeline {
+    agent any
+    triggers {
+        cron('H 8 * * *') // Trigger at 8am
+    }
+    environment {
+        GIT_BRANCH = 'your-branch-name'
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                dir("${ProjectConnectSyncPath}") {
+                    // Clean the directory if it exists
+                    deleteDir()
+                    // Clone the repository
+                    git branch: "${env.GIT_BRANCH}", url: 'https://gitlab.com/your-repo.git'
+                }
+            }
+        }
+        stage('Run ProjectConnectSync') {
+            steps {
+                dir("${ProjectConnectSyncPath}") {
+                    sh 'mvn test -Dcucumber-tags=@ProjectConnectSync'
+                }
+            }
+        }
+        stage('Publish Report') {
+            steps {
+                dir("${ProjectConnectSyncPath}") {
+                    cucumber buildStatus: 'UNSTABLE', fileIncludePattern: '**/cucumber.json', sortingMethod: 'ALPHABETICAL'
+                }
+            }
+        }
+        stage('Archive Artifacts') {
+            steps {
+                dir("${ProjectConnectSyncPath}") {
+                    archiveArtifacts artifacts: '**/*', fingerprint: true
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                currentBuild.result = currentBuild.result ?: 'SUCCESS'
+                emailext subject: "Jenkins Job: ${currentBuild.fullDisplayName}",
+                         body: "Status: ${currentBuild.result}",
+                         to: 'your-email@example.com'
+            }
+        }
+    }
+}
