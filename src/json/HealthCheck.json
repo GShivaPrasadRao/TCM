@@ -1,0 +1,52 @@
+{
+    "applications": [
+      {
+        "appName": "CKBackEnd",
+        "authUrl": "https://ckbackend.com/api/auth/token",
+        "clientId": "ck-client",
+        "clientSecret": "ck-secret",
+        "expectedStatus": "UP",
+        "services": [
+          {
+            "serviceName": "Service1",
+            "healthCheckUrl": "https://ckbackend-service1/actuator/health",
+            "expectedStatus": "UP"
+          },
+          {
+            "serviceName": "Service2",
+            "healthCheckUrl": "https://ckbackend-service2/actuator/health",
+            "expectedStatus": "UP"
+          }
+        ]
+      },
+      {
+        "appName": "CIBAckEnd",
+        "authUrl": "https://cibackend.com/api/auth/token",
+        "clientId": "ci-client",
+        "clientSecret": "ci-secret",
+        "expectedStatus": "UP",
+        "services": [
+          {
+            "serviceName": "Service1",
+            "healthCheckUrl": "https://cibackend-service1/actuator/health",
+            "expectedStatus": "UP"
+          }
+        ]
+      },
+      {
+        "appName": "MLBackEnd",
+        "authUrl": "https://mlbackend.com/api/auth/token",
+        "clientId": "ml-client",
+        "clientSecret": "ml-secret",
+        "expectedStatus": "UP",
+        "services": [
+          {
+            "serviceName": "Service1",
+            "healthCheckUrl": "https://mlbackend-service1/actuator/health",
+            "expectedStatus": "UP"
+          }
+        ]
+      }
+    ]
+  }
+  
